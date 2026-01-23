@@ -3,7 +3,6 @@ using CommunityToolkit.Mvvm.Input;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using WeatherApp.Model;
-using WeatherApp.Repositories;
 using WeatherApp.Services;
 
 namespace WeatherApp.ViewModels

@@ -2,8 +2,6 @@
 using WeatherApp.Services;
 using WeatherApp.Repositories;
 using WeatherApp.ViewModels;
-using System.Reflection;
-using Microsoft.Extensions.Configuration;
 
 namespace WeatherApp
 {
@@ -24,22 +22,7 @@ namespace WeatherApp
             builder.Services.AddHttpClient<IWeatherService, WeatherService>();
             builder.Services.AddTransient<MainPageViewModel>();
             builder.Services.AddTransient<MainPage>();
-
-            //    builder.Services.AddControllers();
-            //        // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-            //        builder.Services.AddOpenApi();
-            //        builder.Services.AddSwaggerGen();
-
-            //        // Configure the HTTP request pipeline.
-            //        if (app.Environment.IsDevelopment())
-            //        {
-            //            app.UseSwagger();
-            //            app.UseSwaggerUI();
-            //            //app.MapOpenApi();
-            //        }
-
-            //app.UseHttpsRedirection();
-
+            //add builders for detailspage if i make one
 #if DEBUG
             builder.Logging.AddDebug();
 #endif

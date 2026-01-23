@@ -1,5 +1,4 @@
 ﻿using WeatherApp.Model;
-using WeatherApp.Repositories;
 
 namespace WeatherApp.Services
 {
