@@ -4,6 +4,8 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using WeatherApp.Model;
 using WeatherApp.Services;
+using System.Linq;
+using WeatherApp.Helpers;
 
 namespace WeatherApp.ViewModels
 {
@@ -12,7 +14,7 @@ namespace WeatherApp.ViewModels
         private readonly IWeatherService _weatherService;
         //Main Search object view
         public ObservableCollection<WeatherModel> Weather {  get; set; }
-        public ObservableCollection<WeatherModel> Forecast { get; set; }
+        public ObservableCollection<ForecastItem> Forecast { get; set; }
         //Detailed view
         [ObservableProperty]
         WeatherModel selectedWeather;
@@ -44,12 +46,34 @@ namespace WeatherApp.ViewModels
             try
             {
                 var result = await _weatherService.GetWeatherAsync(city);
-                _isBusy = false;
+                
                 if (result != null)
                 {
+                    //Fetch Day name version and icon
+                    result.DayDisplay = WeatherHelper.GetDayName(null, true);
+                    result.IconUrl = WeatherHelper.GetIconUrl(result.weather[0].icon);
+
                     Weather.Clear();
                     Weather.Add(result);
                 }
+                var forecastResult = await _weatherService.GetForecastAsync(city);
+                if (forecastResult != null)
+                {
+                    Forecast.Clear();
+
+                    //filter to one measuring point per day
+                    var fiveDayForecast = forecastResult.Where(f => f.dt_txt.Contains("12:00:00")).ToList();
+                    foreach (var item in fiveDayForecast)
+                    {
+                        //Fetch Day name version and icon
+                        item.DayDisplay = WeatherHelper.GetDayName(item.dt_txt);
+                        item.IconUrl = WeatherHelper.GetIconUrl(item.weather[0].icon);
+
+                        //No need to specifically add 5 days since our API only stores 5 days forecast
+                        Forecast.Add(item);
+                    }
+                }
+                _isBusy = false;
             }
             catch (Exception e)
             {

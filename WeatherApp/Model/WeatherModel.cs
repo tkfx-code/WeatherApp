@@ -2,7 +2,12 @@
 namespace WeatherApp.Model
 {
     //Model is my DTO
-    public class WeatherModel
+    public class WeatherModelBase
+    {
+        public string DayDisplay { get; set; }
+        public string IconUrl { get; set; }
+    }
+    public class WeatherModel : WeatherModelBase
     {
         public Coord coord { get; set; }
         public List<Weather> weather { get; set; }
@@ -21,11 +26,12 @@ namespace WeatherApp.Model
         public List<ForecastItem> List { get; set; }
         public CityInfo city { get; set; }
     }
-    public class ForecastItem
+    public class ForecastItem : WeatherModelBase
     {
         public Main main { get; set; }
         public List<Weather> weather { get; set; }
         public string dt_txt { get; set; }
+        
     }
 
     public class Coord
