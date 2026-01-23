@@ -51,7 +51,7 @@ namespace WeatherApp.ViewModels
                 {
                     //Fetch Day name version and icon
                     result.DayDisplay = WeatherHelper.GetDayName(null, true);
-                    result.IconUrl = WeatherHelper.GetIconUrl(result.weather[0].icon);
+                    result.IconUrl = WeatherHelper.GetIconUrl(result.weather);
 
                     Weather.Clear();
                     Weather.Add(result);
@@ -67,7 +67,7 @@ namespace WeatherApp.ViewModels
                     {
                         //Fetch Day name version and icon
                         item.DayDisplay = WeatherHelper.GetDayName(item.dt_txt);
-                        item.IconUrl = WeatherHelper.GetIconUrl(item.weather[0].icon);
+                        item.IconUrl = WeatherHelper.GetIconUrl(item.weather);
 
                         //No need to specifically add 5 days since our API only stores 5 days forecast
                         Forecast.Add(item);
