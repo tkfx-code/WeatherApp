@@ -11,6 +11,8 @@ namespace WeatherApp.ViewModels
 {
     partial class MainPageViewModel : ObservableObject
     {
+        //Take a look to clean up this class before Front end
+
         private readonly IWeatherService _weatherService;
         //Main Search object view
         public ObservableCollection<WeatherModel> Weather {  get; set; }
@@ -24,6 +26,8 @@ namespace WeatherApp.ViewModels
         private string _selectedCity;
         [ObservableProperty]
         private string _selectedTimeline;
+        [ObservableProperty]
+        private string _errorMessage;
 
         public RelayCommand ClearCommand { get; }
 
@@ -41,8 +45,9 @@ namespace WeatherApp.ViewModels
         [RelayCommand]
         public async void FetchCityWeather(string city)
         {
-            _isBusy = true;
-            _selectedCity = city;
+            ErrorMessage = string.Empty;
+            IsBusy = true;
+            SelectedCity = city;
             try
             {
                 var result = await _weatherService.GetWeatherAsync(city);
@@ -73,12 +78,15 @@ namespace WeatherApp.ViewModels
                         Forecast.Add(item);
                     }
                 }
-                _isBusy = false;
             }
             catch (Exception e)
             {
                 Debug.WriteLine($"Error: {e.Message}");
-                return;
+               ErrorMessage = WeatherHelper.GeneralError;
+            }
+            finally
+            {
+                IsBusy = false;
             }
         }
     }

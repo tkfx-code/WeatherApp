@@ -4,6 +4,11 @@ namespace WeatherApp.Helpers
 {
     public static class WeatherHelper
     {
+        //Error strings for different errors
+        public const string CityNotFoundError = "We could not find the town you were looking for";
+        public const string NetworkError = "We could not connect to our weather service";
+        public const string GeneralError = "Something went wrong! Try again later";
+
         //Fetch display name for day, long if today, short if forecast
         public static string GetDayName(string dtTxt, bool isLong = false)
         {
@@ -25,6 +30,14 @@ namespace WeatherApp.Helpers
                 return $"https://openweathermap.org/img/wn/{first.icon}@2x.png";
             }
             return string.Empty;
+        }
+
+        //Convert unix time to something we can read
+        public static string ConvertUnixToTime(int unixTime, int timezoneOffset)
+        {
+            //Returns "12:00" format
+            DateTime dateTime = DateTimeOffset.FromUnixTimeSeconds(unixTime + timezoneOffset).DateTime;
+            return dateTime.ToString("HH:mm"); 
         }
     }
 }

@@ -9,7 +9,6 @@ namespace WeatherApp.Repositories
     public class WeatherService : IWeatherService
     {
         private readonly HttpClient _httpClient;
-        //Do I create a List of my Model object here? f.e. List<WeatherModel> weather = new List<WeatherModel> 
 
         public WeatherService()
         {
