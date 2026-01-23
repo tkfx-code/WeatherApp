@@ -28,14 +28,15 @@ namespace WeatherApp.Repositories
                 var url = $"{AppConfig.WeatherApiBaseUrl}weather?q={city}&appid={AppConfig.WeatherApiKey}&units=metric";
                 var response = await _httpClient.GetAsync(url);
 
-                //Built in method checks if status code not 200-299 and throws error
-                response.EnsureSuccessStatusCode();
+                if (response.IsSuccessStatusCode)
+                {
+                    //convert to read json
+                    var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+                    var data = await response.Content.ReadFromJsonAsync<WeatherModel>(options);
+                    return data;
+                }
+                return null;
 
-                //convert to Json
-                var jsonResponse = await response.Content.ReadAsStringAsync();
-                var weatherData = JsonSerializer.Deserialize<WeatherModel>(jsonResponse);
-
-                return weatherData;
             } catch (HttpRequestException e)
             {
                 Debug.WriteLine($"Error: {e.Message}");
