@@ -1,4 +1,4 @@
-﻿using WeatherApp.Model;
+﻿using static WeatherApp.Model.WeatherModelBase;
 
 namespace WeatherApp.Helpers
 {

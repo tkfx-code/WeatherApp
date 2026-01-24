@@ -2,10 +2,9 @@
 using CommunityToolkit.Mvvm.Input;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
-using WeatherApp.Model;
 using WeatherApp.Services;
-using System.Linq;
 using WeatherApp.Helpers;
+using static WeatherApp.Model.WeatherModelBase;
 
 namespace WeatherApp.ViewModels
 {
@@ -19,7 +18,7 @@ namespace WeatherApp.ViewModels
         public ObservableCollection<ForecastItem> Forecast { get; set; }
         //Detailed view
         [ObservableProperty]
-        WeatherModel selectedWeather;
+        WeatherModel _selectedWeather;
         [ObservableProperty] 
         private bool _isBusy;
         [ObservableProperty]
@@ -29,8 +28,6 @@ namespace WeatherApp.ViewModels
         [ObservableProperty]
         private string _errorMessage;
 
-        public RelayCommand ClearCommand { get; }
-
         public MainPageViewModel(IWeatherService weatherService)
         {
             //Repo
@@ -38,8 +35,19 @@ namespace WeatherApp.ViewModels
             Weather = new ObservableCollection<WeatherModel>();
         }
 
-        // Load Async method?
-        // Update Dashboard method?
+        //Clear city, make sure all info is cleared
+        [RelayCommand]
+        public void Clear()
+        {
+            SelectedCity = string.Empty;
+            ErrorMessage = string.Empty;
+
+            Weather.Clear();
+            Forecast.Clear();
+
+            IsBusy = false;
+            SelectedWeather = null;
+        }
 
         //Properties, which variablesdo we send to UI? 
         [RelayCommand]
@@ -57,6 +65,10 @@ namespace WeatherApp.ViewModels
                     //Fetch Day name version and icon
                     result.DayDisplay = WeatherHelper.GetDayName(null, true);
                     result.IconUrl = WeatherHelper.GetIconUrl(result.weather);
+
+                    //Show converted Sunrise and Sunset time 
+                    result.SunriseView = WeatherHelper.ConvertUnixToTime(result.sys.sunrise, result.timezone);
+                    result.SunsetView = WeatherHelper.ConvertUnixToTime(result.sys.sunrise, result.timezone);
 
                     Weather.Clear();
                     Weather.Add(result);

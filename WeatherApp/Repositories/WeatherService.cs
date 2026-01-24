@@ -1,8 +1,8 @@
 ﻿using System.Diagnostics;
 using System.Net.Http.Json;
 using System.Text.Json;
-using WeatherApp.Model;
 using WeatherApp.Services;
+using static WeatherApp.Model.WeatherModelBase;
 
 namespace WeatherApp.Repositories
 {
