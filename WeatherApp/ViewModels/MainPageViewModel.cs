@@ -4,15 +4,14 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using WeatherApp.Services;
 using WeatherApp.Helpers;
-using static WeatherApp.Model.WeatherModelBase;
+using WeatherApp.Model;
 
 namespace WeatherApp.ViewModels
 {
-    partial class MainPageViewModel : ObservableObject
+    public partial class MainPageViewModel : ObservableObject
     {
-        //Take a look to clean up this class before Front end
-
         private readonly IWeatherService _weatherService;
+
         //Main Search object view
         public ObservableCollection<WeatherModel> Weather {  get; set; }
         public ObservableCollection<ForecastItem> Forecast { get; set; }
@@ -33,6 +32,7 @@ namespace WeatherApp.ViewModels
             //Repo
             _weatherService = weatherService;
             Weather = new ObservableCollection<WeatherModel>();
+            Forecast = new ObservableCollection<ForecastItem>();
         }
 
         //Clear city, make sure all info is cleared
@@ -53,6 +53,7 @@ namespace WeatherApp.ViewModels
         [RelayCommand]
         public async void FetchCityWeather(string city)
         {
+            Clear();
             ErrorMessage = string.Empty;
             IsBusy = true;
             SelectedCity = city;
@@ -68,7 +69,7 @@ namespace WeatherApp.ViewModels
 
                     //Show converted Sunrise and Sunset time 
                     result.SunriseView = WeatherHelper.ConvertUnixToTime(result.sys.sunrise, result.timezone);
-                    result.SunsetView = WeatherHelper.ConvertUnixToTime(result.sys.sunrise, result.timezone);
+                    result.SunsetView = WeatherHelper.ConvertUnixToTime(result.sys.sunset, result.timezone);
 
                     Weather.Clear();
                     Weather.Add(result);

@@ -7,7 +7,7 @@ namespace WeatherApp.Model
         public string DayDisplay { get; set; }
         public string IconUrl { get; set; }
         public string SunriseView { get; set; }
-        public string SunsetView { get; set;
+        public string SunsetView { get; set; }
     }
     public class WeatherModel : WeatherModelBase
     {

@@ -1,4 +1,4 @@
-﻿using static WeatherApp.Model.WeatherModelBase;
+﻿using WeatherApp.Model;
 
 namespace WeatherApp.Services
 {

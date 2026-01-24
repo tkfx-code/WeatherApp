@@ -1,13 +1,13 @@
-﻿namespace WeatherApp
+﻿using WeatherApp.ViewModels;
+
+namespace WeatherApp
 {
     public partial class MainPage : ContentPage
     {
-        public MainPage() //Should i take in viewmodel as parameter in my constructor?
+        public MainPage(MainPageViewModel viewModel)
         {
             InitializeComponent();
-            //BindingContext = viewModel;
-            //viewModel.Param = "";
-            //viewModel.Object.Update();
+            BindingContext = viewModel;
         }
     }
 }
