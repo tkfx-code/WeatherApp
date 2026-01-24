@@ -10,6 +10,8 @@ namespace WeatherApp.Helpers
         public const string NetworkError = "We could not connect to our weather service";
         public const string GeneralError = "Something went wrong! Try again later";
 
+        //perhaps add a static class IconFont with const strings and unicodes for each icon if needed
+
         //Fetch display name for day, long if today, short if forecast
         public static string GetDayName(string dtTxt, bool isLong = false)
         {
