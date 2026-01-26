@@ -26,6 +26,8 @@ namespace WeatherApp.ViewModels
         private string _selectedTimeline;
         [ObservableProperty]
         private string _errorMessage;
+        [ObservableProperty]
+        bool _isDetailsVisible;
 
         public MainPageViewModel(IWeatherService weatherService)
         {
@@ -51,15 +53,25 @@ namespace WeatherApp.ViewModels
 
         //Properties, which variablesdo we send to UI? 
         [RelayCommand]
-        public async void FetchCityWeather(string city)
+        public async Task FetchCityWeather()
         {
-            Clear();
+            if (string.IsNullOrWhiteSpace(SelectedCity))
+            {
+                ErrorMessage = "Write a city name before search";
+                return;
+            }
+
+            //Save to local var
+            string cityToSearch = SelectedCity;
+
+            Weather.Clear();
+            Forecast.Clear();
             ErrorMessage = string.Empty;
             IsBusy = true;
-            SelectedCity = city;
+
             try
             {
-                var result = await _weatherService.GetWeatherAsync(city);
+                var result = await _weatherService.GetWeatherAsync(cityToSearch);
                 
                 if (result != null)
                 {
@@ -71,20 +83,20 @@ namespace WeatherApp.ViewModels
                     result.SunriseView = WeatherHelper.ConvertUnixToTime(result.sys.sunrise, result.timezone);
                     result.SunsetView = WeatherHelper.ConvertUnixToTime(result.sys.sunset, result.timezone);
 
-                    Weather.Clear();
                     Weather.Add(result);
+                    //Debug to check where error lies if screen empty - if 0, deserialize failed, if 1, failute in XAML binding
+                    Debug.WriteLine($"Number of cities in list: {Weather.Count}");
+                    IsDetailsVisible = false;
                 }
-                var forecastResult = await _weatherService.GetForecastAsync(city);
+                var forecastResult = await _weatherService.GetForecastAsync(cityToSearch);
                 if (forecastResult != null)
                 {
-                    Forecast.Clear();
-
                     //filter to one measuring point per day
                     var fiveDayForecast = forecastResult.Where(f => f.dt_txt.Contains("12:00:00")).ToList();
                     foreach (var item in fiveDayForecast)
                     {
                         //Fetch Day name version and icon
-                        item.DayDisplay = WeatherHelper.GetDayName(item.dt_txt);
+                        item.DayDisplay = WeatherHelper.GetDayName(item.dt_txt, false);
                         item.IconUrl = WeatherHelper.GetIconUrl(item.weather);
 
                         //No need to specifically add 5 days since our API only stores 5 days forecast
@@ -94,7 +106,7 @@ namespace WeatherApp.ViewModels
             }
             catch (Exception e)
             {
-                Debug.WriteLine($"Error: {e.Message}");
+               Debug.WriteLine($"Error: {e.Message}");
                ErrorMessage = WeatherHelper.GeneralError;
             }
             finally
@@ -102,5 +114,12 @@ namespace WeatherApp.ViewModels
                 IsBusy = false;
             }
         }
+
+        [RelayCommand]
+        public void ToggleDetails()
+        {
+            IsDetailsVisible = !IsDetailsVisible;
+        }
+
     }
 }

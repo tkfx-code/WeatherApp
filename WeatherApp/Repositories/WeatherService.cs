@@ -11,10 +11,6 @@ namespace WeatherApp.Repositories
     {
         private readonly HttpClient _httpClient;
 
-        public WeatherService()
-        {
-        }
-
         public WeatherService(HttpClient httpClient)
         {
             _httpClient = httpClient;
@@ -23,9 +19,11 @@ namespace WeatherApp.Repositories
         //Fetch API data, handle url strings and try catch
         public async Task<WeatherModel> GetWeatherAsync(string city)
         {
+            Debug.WriteLine($"Searching for: {city}");
+
             try
             {
-                var url = $"{AppConfig.WeatherApiBaseUrl}weather?q={city}&appid={AppConfig.WeatherApiKey}&units=metric";
+                var url = $"{AppConfig.WeatherApiBaseUrl}weather?q={Uri.EscapeDataString(city)}&appid={AppConfig.WeatherApiKey}&units=metric";
                 var response = await _httpClient.GetAsync(url);
 
                 if (response.IsSuccessStatusCode)

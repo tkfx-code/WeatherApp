@@ -42,5 +42,8 @@ namespace WeatherApp.Helpers
             DateTime dateTime = DateTimeOffset.FromUnixTimeSeconds(unixTime + timezoneOffset).DateTime;
             return dateTime.ToString("HH:mm"); 
         }
+
+        //Add method that fetches specific code or name depending on weather 0 main (f.e clouds or rain)
+        //Add method for suggestions in dropdown
     }
 }
