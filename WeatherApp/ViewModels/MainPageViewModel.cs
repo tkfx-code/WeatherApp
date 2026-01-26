@@ -51,7 +51,7 @@ namespace WeatherApp.ViewModels
             SelectedWeather = null;
         }
 
-        //Properties, which variablesdo we send to UI? 
+        //Properties
         [RelayCommand]
         public async Task FetchCityWeather()
         {

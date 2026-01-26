@@ -5,92 +5,162 @@
              xmlns:model="clr-namespace:WeatherApp.Model"
              x:DataType="viewmodels:MainPageViewModel"
              x:Class="WeatherApp.MainPage"
-             BackgroundColor="DarkCyan">
+             Shell.NavBarIsVisible="False">
 
-    <VerticalStackLayout Padding="30" Spacing="20" VerticalOptions="Center">
-        <Label Text="Weather Test Mode" 
-               FontSize="24" 
-               HorizontalOptions="Center" 
-               TextColor="White"/>
 
-        <Entry Text="{Binding SelectedCity, Mode=TwoWay}" 
-               Placeholder="Skriv en stad (t.ex. Stockholm)..."
-               TextColor="White"
-               PlaceholderColor="LightGray"/>
-
-        <Button Text="Testa sökning" 
-                Command="{Binding FetchCityWeatherCommand}"
-                BackgroundColor="Orange"
-                TextColor="Black"/>
-
-        <ActivityIndicator IsRunning="{Binding IsBusy}" Color="White" />
-
-        <CollectionView ItemsSource="{Binding Weather}">
-            <CollectionView.ItemTemplate>
-                <DataTemplate x:DataType="model:WeatherModel">
-                    <VerticalStackLayout Padding="10">
-                        <Label Text="{Binding name}" FontSize="30" TextColor="White" HorizontalOptions="Center"/>
-                        <Label Text="{Binding main.temp, StringFormat='{0:F1}°C'}" FontSize="50" TextColor="Orange" HorizontalOptions="Center"/>
-                        <Label Text="{Binding weather[0].description}" TextColor="LightGray" HorizontalOptions="Center"/>
-                    </VerticalStackLayout>
-                </DataTemplate>
-            </CollectionView.ItemTemplate>
-        </CollectionView>
-
-        <!--<Label Text="{Binding Weather[0].name, StringFormat='Hittade data för: {0}'}" 
-               TextColor="SpringGreen"
-               FontSize="20"
-               HorizontalOptions="Center"
-               IsVisible="{Binding Weather.Count}"/>-->
-
-        <Label Text="{Binding ErrorMessage}" 
-               TextColor="Red" 
-               HorizontalOptions="Center"/>
-    </VerticalStackLayout>
-
-    <!--Dynamic Background--><!--
     <Grid>
         <BoxView>
+        <!--Background gradient-->
             <BoxView.Background>
                 <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
-                    <GradientStop Color="{Binding BackgroundStart}" Offset="0.0"/>
-                    <GradientStop Color="{Binding BackgroundEnd}" Offset="1.0"/>
+                    <GradientStop Color="#1e3c72" Offset="0.0"/>
+                    <GradientStop Color="#2a5298" Offset="1.0"/>
                 </LinearGradientBrush>
             </BoxView.Background>
         </BoxView>
-    </Grid>
 
-    <ScrollView>
-        <VerticalStackLayout Padding="20" Spacing="20">
-            --><!--Top Spacer--><!--
-            <BoxView HeightRequest="{Binding IsDetailsVisible, Converter={StaticResource BoolToHeight}}" Color="Transparent"/>
+        <ScrollView>
+            <VerticalStackLayout Padding="20" Spacing="20">
 
-            --><!--Searchbar--><!--
-            <Grid RowDefinitions="Auto, Auto" ColumnDefinitions="*, Auto" Margin="0 10">
-                <Border Grid.Row="0" Grid.ColumnSpan="2"
-                        Style="{StaticResource TransparentCard}"
-                        Padding="15,10">
-                    <Grid ColumnDefinitions="*, Auto, Auto">
-                        <Entry Text="{Binding SelectedCity}"
-                                   Placeholder="Search city..."
-                                   PlaceholderColor="LightGray"
-                                   TextColor="White"
-                                   FontSize="18"
-                                   ReturnCommand="{Binding FetchCityWeatherCommand}"
-                                   Completed="OnSearchCompleted"/>
-                        --><!--Clear button--><!--
-                        <ImageButton Grid.Column="1"
-                                     Source="clear_icon.png"
-                                     Command="{Binding ClearCommand}"
-                                     IsVisible="{Binding SelectedCity.Length, Converter={StaticResource MinLengthToBool}}"/>
-                        --><!--Search button--><!--
-                        <ImageButton Grid.Column="2"
-                                     Source="search_icon.png"
-                                     Command="{Binding FetchCityWeatherCommand}"/>
+                <!--Search bar-->
+                <BoxView HeightRequest="40" Color="Transparent"/>
+                <Border StrokeShape="RoundRectangle 25"
+                        BackgroundColor="#30FFFFFF"
+                        StrokeThickness="0"
+                        Padding="15,5">
+                    <Grid ColumnDefinitions="*, Auto">
+                        <Entry x:Name="CityEntry"
+                               Text="{Binding SelectedCity, Mode=TwoWay}" 
+                               Placeholder="Search city.."
+                               PlaceholderColor="LightGray"
+                               TextColor="White"
+                               FontSize="18"
+                               VerticalOptions="Center"
+                               ReturnCommand="{Binding FetchCityWeatherCommand}"/>
+                        <!--Search button : Later change to ImageSource to use Icon for button-->
+                        <Button Grid.Column="1"
+                                     Text="🔍" 
+                                     Command="{Binding FetchCityWeatherCommand}"
+                                     BackgroundColor="Transparent"
+                                     FontSize="20">
+                        </Button>
                     </Grid>
                 </Border>
 
-                --><!--Autocomplete dropdown--><!--
+                <!--Loading indicator-->
+                <ActivityIndicator IsRunning="{Binding IsBusy}"
+                                   IsVisible="{Binding IsBusy}"
+                                   Color="White"
+                                   HeightRequest="40"/>
+
+                <!--Showing weather card-->
+                <CollectionView ItemsSource="{Binding Weather}"
+                                IsVisible="{Binding Weather.Count}">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="model:WeatherModel">
+                            <Border StrokeShape="RoundRectangle 20"
+                                    BackgroundColor="#40FFFFFF"
+                                    StrokeThickness="0"
+                                    Padding="20">
+                                <VerticalStackLayout Spacing="10" HorizontalOptions="Center">
+                                    <Label Text="{Binding name}" 
+                                           FontSize="32" 
+                                           FontAttributes="Bold"
+                                           TextColor="White" 
+                                           HorizontalOptions="Center"/>
+                                    <Label Text="{Binding main.temp, StringFormat='{0:F1}°C'}" 
+                                           FontSize="80" 
+                                           FontAttributes="Bold" 
+                                           TextColor="White" 
+                                           HorizontalOptions="Center"/>
+                                    <Label Text="{Binding weather[0].description}" 
+                                           FontSize="20"
+                                           TextColor="LightGray" 
+                                           HorizontalOptions="Center"
+                                           TextTransform="Uppercase"/>
+
+                                    <!--Sunrise and sunset-->
+                                    <Grid ColumnDefinitions="Auto, Auto, Auto" HorizontalOptions="Center" Margin="0 10 0 0">
+                                        <Label Grid.Column="0"
+                                               Text="{Binding SunriseView}" 
+                                               TextColor="White"/>
+                                        <Label Grid.Column="1"
+                                               Text=" ☀️ " 
+                                               Margin="10 0" />
+                                        <Label Grid.Column="2"
+                                               Text="{Binding SunsetView}" 
+                                               TextColor="White" />
+                                    </Grid>
+                                </VerticalStackLayout>
+                            </Border>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+                    <!--Error Message-->
+                    <Label Text="{Binding ErrorMessage}"
+                            TextColor="Salmon"
+                            HorizontalOptions="Center"
+                            FontAttributes="Italic"/>
+            </VerticalStackLayout>
+        </ScrollView>
+    </Grid>
+</ContentPage>
+
+        <!--TEST MODE-->
+                <!--<Label Text="Weather Test Mode" 
+                   FontSize="24" 
+                   HorizontalOptions="Center" 
+                   TextColor="White"/>
+
+            <Entry Text="{Binding SelectedCity, Mode=TwoWay}" 
+                   Placeholder="Skriv en stad (t.ex. Stockholm)..."
+                   TextColor="White"
+                   PlaceholderColor="LightGray"/>
+
+            <Button Text="Testa sökning" 
+                    Command="{Binding FetchCityWeatherCommand}"
+                    BackgroundColor="Orange"
+                    TextColor="Black"/>
+
+            <ActivityIndicator IsRunning="{Binding IsBusy}" Color="White" />
+
+            <CollectionView ItemsSource="{Binding Weather}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="model:WeatherModel">
+                        <VerticalStackLayout Padding="10">
+                            <Label Text="{Binding name}" FontSize="30" TextColor="White" HorizontalOptions="Center"/>
+                            <Label Text="{Binding main.temp, StringFormat='{0:F1}°C'}" FontSize="50" TextColor="Orange" HorizontalOptions="Center"/>
+                            <Label Text="{Binding weather[0].description}" TextColor="LightGray" HorizontalOptions="Center"/>
+                        </VerticalStackLayout>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>-->
+
+            <!--<Label Text="{Binding Weather[0].name, StringFormat='Hittade data för: {0}'}" 
+                   TextColor="SpringGreen"
+                   FontSize="20"
+                   HorizontalOptions="Center"
+                   IsVisible="{Binding Weather.Count}"/>-->
+
+            <!--<Label Text="{Binding ErrorMessage}" 
+                   TextColor="Red" 
+                   HorizontalOptions="Center"/>
+        </VerticalStackLayout>-->
+    
+
+    <!--FIRST CODE
+    
+            --><!--Top Spacer--><!--
+            <BoxView HeightRequest="{Binding IsDetailsVisible, Converter={StaticResource BoolToHeight}}" Color="Transparent"/>
+
+            -->
+              <!--Clear button-->
+                    <!--<ImageButton Grid.Column="1"
+                                    Source="clear_icon.png"
+                                    Command="{Binding ClearCommand}"
+                                    IsVisible="{Binding SelectedCity.Length, Converter={StaticResource MinLengthToBool}}"/>-->
+                        
+                <!--Autocomplete dropdown--><!--
                 <Border Grid.Row="1" Grid.ColumnSpan="2"
                         IsVisible="{Binding Suggestions}"
                         Style="{StaticResource TransparentCard}"
@@ -214,4 +284,4 @@
             </Border>
         </VerticalStackLayout>
     </ScrollView>-->
-</ContentPage>
+
