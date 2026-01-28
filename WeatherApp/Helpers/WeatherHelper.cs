@@ -30,7 +30,7 @@ namespace WeatherApp.Helpers
             var first = weatherList.FirstOrDefault();
             if (first != null && !string.IsNullOrEmpty(first.icon))
             {
-                return $"https://openweathermap.org/img/wn/{first.icon}@2x.png";
+                return $"http://openweathermap.org/img/wn/{first.icon}@2x.png";
             }
             return string.Empty;
         }

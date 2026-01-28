@@ -69,6 +69,14 @@
                                            FontAttributes="Bold"
                                            TextColor="White" 
                                            HorizontalOptions="Center"/>
+                                        <Image HeightRequest="100"
+                                               WidthRequest="100"
+                                               HorizontalOptions="Center">
+                                            <Image.Source>
+                                                <UriImageSource Uri="{Binding IconUrl}"
+                                                                CachingEnabled="False"/>
+                                            </Image.Source>
+                                        </Image>
                                         <Label Text="{Binding main.temp, StringFormat='{0:F1}°C'}" 
                                            FontSize="80" 
                                            FontAttributes="Bold" 

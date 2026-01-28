@@ -79,13 +79,17 @@ namespace WeatherApp.ViewModels
                     result.DayDisplay = WeatherHelper.GetDayName(null, true);
                     result.IconUrl = WeatherHelper.GetIconUrl(result.weather);
 
+                    //Force show icon
+                    MainThread.BeginInvokeOnMainThread(() =>
+                    {
+                        result.IconUrl = WeatherHelper.GetIconUrl(result.weather);
+                    });
+
                     //Show converted Sunrise and Sunset time 
                     result.SunriseView = WeatherHelper.ConvertUnixToTime(result.sys.sunrise, result.timezone);
                     result.SunsetView = WeatherHelper.ConvertUnixToTime(result.sys.sunset, result.timezone);
 
                     Weather.Add(result);
-                    //Debug to check where error lies if screen empty - if 0, deserialize failed, if 1, failute in XAML binding
-                    Debug.WriteLine($"Number of cities in list: {Weather.Count}");
                     IsDetailsVisible = false;
                 }
                 var forecastResult = await _weatherService.GetForecastAsync(cityToSearch);
