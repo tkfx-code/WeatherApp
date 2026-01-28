@@ -58,41 +58,79 @@
                                 IsVisible="{Binding Weather.Count}">
                     <CollectionView.ItemTemplate>
                         <DataTemplate x:DataType="model:WeatherModel">
-                            <Border StrokeShape="RoundRectangle 20"
-                                    BackgroundColor="#40FFFFFF"
-                                    StrokeThickness="0"
-                                    Padding="20">
-                                <VerticalStackLayout Spacing="10" HorizontalOptions="Center">
-                                    <Label Text="{Binding name}" 
+                            <VerticalStackLayout Spacing="20">
+                                <Border StrokeShape="RoundRectangle 20"
+                                        BackgroundColor="#40FFFFFF"
+                                        StrokeThickness="0"
+                                        Padding="20">
+                                    <VerticalStackLayout Spacing="10" HorizontalOptions="Center">
+                                        <Label Text="{Binding name}" 
                                            FontSize="32" 
                                            FontAttributes="Bold"
                                            TextColor="White" 
                                            HorizontalOptions="Center"/>
-                                    <Label Text="{Binding main.temp, StringFormat='{0:F1}°C'}" 
+                                        <Label Text="{Binding main.temp, StringFormat='{0:F1}°C'}" 
                                            FontSize="80" 
                                            FontAttributes="Bold" 
                                            TextColor="White" 
                                            HorizontalOptions="Center"/>
-                                    <Label Text="{Binding weather[0].description}" 
+                                        <Label Text="{Binding weather[0].description}" 
                                            FontSize="20"
                                            TextColor="LightGray" 
                                            HorizontalOptions="Center"
                                            TextTransform="Uppercase"/>
 
-                                    <!--Sunrise and sunset-->
-                                    <Grid ColumnDefinitions="Auto, Auto, Auto" HorizontalOptions="Center" Margin="0 10 0 0">
-                                        <Label Grid.Column="0"
+                                        <!--Sunrise and sunset-->
+                                        <Grid ColumnDefinitions="Auto, Auto, Auto" HorizontalOptions="Center" Margin="0 10 0 0">
+                                            <Label Grid.Column="0"
                                                Text="{Binding SunriseView}" 
                                                TextColor="White"/>
-                                        <Label Grid.Column="1"
+                                            <Label Grid.Column="1"
                                                Text=" ☀️ " 
                                                Margin="10 0" />
-                                        <Label Grid.Column="2"
+                                            <Label Grid.Column="2"
                                                Text="{Binding SunsetView}" 
                                                TextColor="White" />
-                                    </Grid>
-                                </VerticalStackLayout>
-                            </Border>
+                                        </Grid>
+                                    </VerticalStackLayout>
+                                </Border>
+                                <!--5 day prognosis-->
+                                <FlexLayout BindableLayout.ItemsSource="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:MainPageViewModel}}, Path=Forecast}"
+                                            JustifyContent="SpaceBetween"
+                                            AlignItems="Center"
+                                            Direction="Row"
+                                            Margin="20 0 35 0">
+
+                                    <BindableLayout.ItemTemplate>
+                                        <DataTemplate x:DataType="model:ForecastItem">
+                                            <Border FlexLayout.Basis="19%"
+                                                    StrokeShape="RoundRectangle 12"
+                                                    BackgroundColor="#30FFFFFF"
+                                                    StrokeThickness="0"
+                                                    Padding="5,10">
+
+                                                <VerticalStackLayout Spacing="5" HorizontalOptions="Center">
+                                                    <Label Text="{Binding DayDisplay}" 
+                                                           TextColor="White" 
+                                                           FontSize="12" 
+                                                           FontAttributes="Bold" 
+                                                           HorizontalTextAlignment="Center"/>
+
+                                                    <Label Text="☁️" 
+                                                           FontSize="20" 
+                                                           HorizontalTextAlignment="Center"/>
+
+                                                    <Label Text="{Binding main.temp, StringFormat='{0:F0}°'}" 
+                                                           TextColor="White" 
+                                                           FontSize="16" 
+                                                           FontAttributes="Bold" 
+                                                           HorizontalTextAlignment="Center"/>
+                                                </VerticalStackLayout>
+                                            </Border>
+                                        </DataTemplate>
+                                    </BindableLayout.ItemTemplate>
+                                </FlexLayout>
+                            </VerticalStackLayout>
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
                 </CollectionView>
