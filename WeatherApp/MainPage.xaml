@@ -36,14 +36,18 @@
                                TextColor="White"
                                FontSize="18"
                                VerticalOptions="Center"
-                               ReturnCommand="{Binding FetchCityWeatherCommand}"/>
+                               ReturnCommand="{Binding FetchCityWeatherCommand}"
+                               Grid.Column="0"/>
                         <!--Search button : Later change to ImageSource to use Icon for button-->
-                        <Button Grid.Column="1"
-                                     Text="🔍" 
+                        <ImageButton Grid.Column="1"
+                                     Source="search_icon.png"
                                      Command="{Binding FetchCityWeatherCommand}"
+                                     HeightRequest="20"
+                                     WidthRequest="20"
                                      BackgroundColor="Transparent"
-                                     FontSize="20">
-                        </Button>
+                                     VerticalOptions="Center"
+                                     Padding="5 5 5 5">
+                        </ImageButton>
                     </Grid>
                 </Border>
 
@@ -69,21 +73,27 @@
                                            FontAttributes="Bold"
                                            TextColor="White" 
                                            HorizontalOptions="Center"/>
-                                        <Image HeightRequest="100"
-                                               WidthRequest="100"
-                                               HorizontalOptions="Center">
-                                            <Image.Source>
-                                                <UriImageSource Uri="{Binding IconUrl}"
-                                                                CachingEnabled="False"/>
-                                            </Image.Source>
-                                        </Image>
-                                        <Label Text="{Binding main.temp, StringFormat='{0:F1}°C'}" 
-                                           FontSize="80" 
-                                           FontAttributes="Bold" 
-                                           TextColor="White" 
-                                           HorizontalOptions="Center"/>
+
+                                        <HorizontalStackLayout HorizontalOptions="Center" VerticalOptions="Center" Spacing="10">
+                                            <Label Text="{Binding main.temp, StringFormat='{0:F1}°C'}" 
+                                                   FontSize="50" 
+                                                   FontAttributes="Bold" 
+                                                   TextColor="White" 
+                                                   HorizontalOptions="Center"
+                                                   VerticalOptions="Center"/>
+                                            <Image HeightRequest="100"
+                                                   WidthRequest="100"
+                                                   HorizontalOptions="Center">
+                                                <Image.Source>
+                                                    <UriImageSource Uri="{Binding IconUrl}"
+                                                                    CachingEnabled="False"/>
+                                                </Image.Source>
+                                            </Image>
+                                        </HorizontalStackLayout>
+                                        
                                         <Label Text="{Binding weather[0].description}" 
-                                           FontSize="20"
+                                           FontSize="18"
+                                           FontAttributes="Italic"
                                            TextColor="LightGray" 
                                            HorizontalOptions="Center"
                                            TextTransform="Uppercase"/>
@@ -92,13 +102,15 @@
                                         <Grid ColumnDefinitions="Auto, Auto, Auto" HorizontalOptions="Center" Margin="0 10 0 0">
                                             <Label Grid.Column="0"
                                                Text="{Binding SunriseView}" 
-                                               TextColor="White"/>
-                                            <Label Grid.Column="1"
-                                               Text=" ☀️ " 
-                                               Margin="10 0" />
+                                               TextColor="White"
+                                               FontSize="20"/>
+                                            <Image Source="sun_icon.png"
+                                                   HeightRequest="30"
+                                                   Grid.Column="1"/>
                                             <Label Grid.Column="2"
                                                Text="{Binding SunsetView}" 
-                                               TextColor="White" />
+                                               TextColor="White" 
+                                               FontSize="20"/>
                                         </Grid>
                                     </VerticalStackLayout>
                                 </Border>
@@ -120,13 +132,14 @@
                                                 <VerticalStackLayout Spacing="5" HorizontalOptions="Center">
                                                     <Label Text="{Binding DayDisplay}" 
                                                            TextColor="White" 
-                                                           FontSize="12" 
+                                                           FontSize="14" 
                                                            FontAttributes="Bold" 
                                                            HorizontalTextAlignment="Center"/>
 
-                                                    <Label Text="☁️" 
-                                                           FontSize="20" 
-                                                           HorizontalTextAlignment="Center"/>
+                                                    <Image Source="{Binding IconUrl}"
+                                                           HeightRequest="45"
+                                                           WidthRequest="45"
+                                                           HorizontalOptions="Center"/>
 
                                                     <Label Text="{Binding main.temp, StringFormat='{0:F0}°'}" 
                                                            TextColor="White" 
@@ -152,46 +165,6 @@
     </Grid>
 </ContentPage>
 
-        <!--TEST MODE-->
-                <!--<Label Text="Weather Test Mode" 
-                   FontSize="24" 
-                   HorizontalOptions="Center" 
-                   TextColor="White"/>
-
-            <Entry Text="{Binding SelectedCity, Mode=TwoWay}" 
-                   Placeholder="Skriv en stad (t.ex. Stockholm)..."
-                   TextColor="White"
-                   PlaceholderColor="LightGray"/>
-
-            <Button Text="Testa sökning" 
-                    Command="{Binding FetchCityWeatherCommand}"
-                    BackgroundColor="Orange"
-                    TextColor="Black"/>
-
-            <ActivityIndicator IsRunning="{Binding IsBusy}" Color="White" />
-
-            <CollectionView ItemsSource="{Binding Weather}">
-                <CollectionView.ItemTemplate>
-                    <DataTemplate x:DataType="model:WeatherModel">
-                        <VerticalStackLayout Padding="10">
-                            <Label Text="{Binding name}" FontSize="30" TextColor="White" HorizontalOptions="Center"/>
-                            <Label Text="{Binding main.temp, StringFormat='{0:F1}°C'}" FontSize="50" TextColor="Orange" HorizontalOptions="Center"/>
-                            <Label Text="{Binding weather[0].description}" TextColor="LightGray" HorizontalOptions="Center"/>
-                        </VerticalStackLayout>
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
-            </CollectionView>-->
-
-            <!--<Label Text="{Binding Weather[0].name, StringFormat='Hittade data för: {0}'}" 
-                   TextColor="SpringGreen"
-                   FontSize="20"
-                   HorizontalOptions="Center"
-                   IsVisible="{Binding Weather.Count}"/>-->
-
-            <!--<Label Text="{Binding ErrorMessage}" 
-                   TextColor="Red" 
-                   HorizontalOptions="Center"/>
-        </VerticalStackLayout>-->
     
 
     <!--FIRST CODE
@@ -236,61 +209,9 @@
                                    Color="White"
                                    HeightRequest="50"/>
 
-                --><!--Overview Card--><!--
-                <Border IsVisible="{Binding Weather.Count}"
-                        Style="{StaticResource TransparentCard}">
-                    <Border.GestureRecognizers>
-                        <TapGestureRecognizer Command="{Binding ToggleDetailsCommand}"/>
-                    </Border.GestureRecognizers>
-
-                    <VerticalStackLayout Padding="20" Spacing="10">
-                        --><!--City and date--><!--
-                        <Label Text="{Binding Weather[0].name}"
-                           FontSize="32"
-                           HorizontalOptions="Center"/>
-
-                        <Label Text="{Binding Weather[0].DateDisplay}"
-                               FontSize="16"
-                               TextColor="LightGray"
-                               HorizontalTextAlignment="Center"/>
-
-                        --><!--Temp & Icon--><!--
-                        <Grid ColumnDefinitions="*,Auto,*" Margin="0 10">
-                            <Label Grid.Column="1"
-                                   Text="{Binding Weather[0].main.temp, StringFormat='{0:F0}°'}"
-                                   FontSize="64"
-                                   FontAttributes="Bold"
-                                   TextColor="White"
-                                   HorizontalTextAlignment="Center"
-                                   VerticalTextAlignment="Center"/>
-                        </Grid>
-
-                        <Image Source="{Binding GetIconUrl}"
-                               HeightRequest="100"
-                               Aspect="AspectFit"/>
-                        <Label Text="{Binding Weather[0].weather[0].description}"
-                               FontSize="20"
-                               TextColor="White"
-                               HorizontalTextAlignment="Center"
-                               TextTransform="Uppercase"/>
-
-                        --><!--Sunset/Sunrise--><!--
-                        <Grid ColumnDefinitions="*,*" Margin="0 10">
-                            <Label Grid.Column="0"
-                                   Text="{Binding Weather[0].SunriseView}"
-                                   VerticalOptions="Center"/>
-                            <Label Grid.Column="1"
-                                   Text="☀"
-                                   Margin="10,0" FontSize="24"/>
-                            <Label Grid.Column="2"
-                                   Text="{Binding Weather[0].SunsetView}"
-                                   VerticalOptions="Center"/>
-                        </Grid>
-                        <Label Text="Details" FontSize="10" HorizontalOptions="Center" Opacity="0.6"/>
-                    </VerticalStackLayout>
-                </Border>
-            </Grid>
-            --><!--Detailed view, expanded-->
+                -->
+                
+            <!--Detailed view, expanded-->
 
             <!--5-day forecast--><!--
             <Border IsVisible="{Binding IsDetailsVisible}"
