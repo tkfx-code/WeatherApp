@@ -1,4 +1,6 @@
 ﻿
+using System.Text.Json.Serialization;
+
 namespace WeatherApp.Model
 {
     //Model is my DTO
@@ -8,6 +10,7 @@ namespace WeatherApp.Model
         public string IconUrl { get; set; }
         public string SunriseView { get; set; }
         public string SunsetView { get; set; }
+        
     }
     public class WeatherModel : WeatherModelBase
     {
@@ -15,13 +18,11 @@ namespace WeatherApp.Model
         public List<Weather> weather { get; set; }
         public Main main { get; set; }
         public Wind wind { get; set; }
-        //public Clouds clouds { get; set; }
-        //public int dt { get; set; }
         public Sys sys { get; set; }
         public int timezone { get; set; }
         public int id { get; set; }
         public string name { get; set; }
-        //public int cod { get; set; }
+        public Snow snow { get; set; }
     }
     public class ForecastResponse
     {
@@ -48,10 +49,8 @@ namespace WeatherApp.Model
         public float feels_like { get; set; } //Unit Default: Kelvin, Metric: Celsius, Imperial: Fahrenheit 
         public float temp_min { get; set; } //Unit Default: Kelvin, Metric: Celsius, Imperial: Fahrenheit 
         public float temp_max { get; set; } //Unit Default: Kelvin, Metric: Celsius, Imperial: Fahrenheit 
-        //public int pressure { get; set; }
+        public int pressure { get; set; }
         public int humidity { get; set; }
-        //public int sea_level { get; set; }
-        //public int grnd_level { get; set; }
     }
 
     public class Wind
@@ -59,11 +58,6 @@ namespace WeatherApp.Model
         public float speed { get; set; }
         //public int deg { get; set; }
     }
-
-    //public class Clouds
-    //{
-    //    public int all { get; set; }
-    //}
 
     public class Sys
     {
@@ -84,5 +78,11 @@ namespace WeatherApp.Model
     {
         public string name { get; set; }
         public string country { get; set; }
+    }
+
+    public class Snow
+    {
+        [JsonPropertyName("1h")]
+        public double one_h { get; set; }
     }
 }
