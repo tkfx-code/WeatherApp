@@ -6,11 +6,13 @@
              xmlns:views="clr-namespace:WeatherApp.Views"
              x:DataType="viewmodels:MainPageViewModel"
              x:Class="WeatherApp.MainPage"
-             Shell.NavBarIsVisible="False">
+             Shell.NavBarIsVisible="False"
+             Background="{Binding BackgroundBrush}">
     <Grid>
         <!--<views:BackgroundEffects BindingContext="{Binding Weather[0]}"
                                      IsVisible="{Binding Weather.Count}"/>-->
-        <Border Style="{DynamicResource ResponsiveBackground}"
+        <Border BackgroundColor="Transparent"
+                StrokeThickness="0"
                 StrokeShape="RoundRectangle 20"
                 Margin="20"
                 Padding="20"

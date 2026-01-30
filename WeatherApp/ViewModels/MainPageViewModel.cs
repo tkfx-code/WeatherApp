@@ -29,7 +29,10 @@ namespace WeatherApp.ViewModels
         [ObservableProperty]
         bool _isDetailsVisible;
         [ObservableProperty]
+        private Brush _backgroundBrush = WeatherHelper.GetBackgroundGradient("Clear");
+        [ObservableProperty]
         private ObservableCollection<CityInfo> _citySuggestions = new();
+
 
         public MainPageViewModel(IWeatherService weatherService)
         {
@@ -93,7 +96,18 @@ namespace WeatherApp.ViewModels
                     result.SunriseView = WeatherHelper.ConvertUnixToTime(result.sys.sunrise, result.timezone);
                     result.SunsetView = WeatherHelper.ConvertUnixToTime(result.sys.sunset, result.timezone);
 
-                    Weather.Add(result);
+                    //Find Weather type for Background
+                    var weatherCondition = result.weather.FirstOrDefault()?.main ?? "Clear";
+                    if (!string.IsNullOrEmpty(weatherCondition))
+                    {
+                        BackgroundBrush = WeatherHelper.GetBackgroundGradient(weatherCondition);
+                    }
+                    else
+                    {
+                        await Shell.Current.DisplayAlert("Error", WeatherHelper.GeneralError, "OK");
+                    }
+
+                        Weather.Add(result);
                     IsDetailsVisible = false;
                 }
                 var forecastResult = await _weatherService.GetForecastAsync(cityToSearch);
@@ -145,6 +159,5 @@ namespace WeatherApp.ViewModels
                 CitySuggestions = new ObservableCollection<CityInfo>(cities);
             });
         }
-
     }
 }
