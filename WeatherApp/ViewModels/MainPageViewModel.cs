@@ -28,6 +28,8 @@ namespace WeatherApp.ViewModels
         private string _errorMessage;
         [ObservableProperty]
         bool _isDetailsVisible;
+        [ObservableProperty]
+        private ObservableCollection<CityInfo> _citySuggestions = new();
 
         public MainPageViewModel(IWeatherService weatherService)
         {
@@ -46,6 +48,7 @@ namespace WeatherApp.ViewModels
 
             Weather.Clear();
             Forecast.Clear();
+            CitySuggestions.Clear();
 
             IsBusy = false;
             SelectedWeather = null;
@@ -72,6 +75,7 @@ namespace WeatherApp.ViewModels
             try
             {
                 var result = await _weatherService.GetWeatherAsync(cityToSearch);
+                CitySuggestions.Clear();
                 
                 if (result != null)
                 {
@@ -123,6 +127,23 @@ namespace WeatherApp.ViewModels
         public void ToggleDetails()
         {
             IsDetailsVisible = !IsDetailsVisible;
+        }
+
+        //Show city suggestions when typing from 3 letters
+        partial void OnSelectedCityChanged(string value)
+        {
+            if (value?.Length >= 3) GetCitySuggestions(value);
+            else CitySuggestions.Clear();
+        }
+
+        //Fetch city suggestions from API
+        private async void GetCitySuggestions(string query)
+        {
+            var cities = await _weatherService.GetCitySuggestionsAsync(query);
+            MainThread.BeginInvokeOnMainThread(() =>
+            {
+                CitySuggestions = new ObservableCollection<CityInfo>(cities);
+            });
         }
 
     }

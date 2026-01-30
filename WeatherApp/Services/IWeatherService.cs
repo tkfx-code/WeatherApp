@@ -7,5 +7,6 @@ namespace WeatherApp.Services
         //Signatures for methods
         Task<WeatherModel> GetWeatherAsync(string city);
         Task<List<ForecastItem>> GetForecastAsync(string city);
+        Task<List<CityInfo>> GetCitySuggestionsAsync(string query);
     }
 }

@@ -1,0 +1,57 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ResourceDictionary xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
+
+
+<!--Reponsive Background-->
+    <Style x:Key="ResponsiveBackground" TargetType="Border">
+        <Setter Property="Background">
+            <Setter.Value>
+                <LinearGradientBrush EndPoint="0,1">
+                    <GradientStop Color="#1e3c72" Offset="0.0"/>
+                    <GradientStop Color="#2a5298" Offset="1.0"/>
+                </LinearGradientBrush>
+            </Setter.Value>
+        </Setter>
+
+        <Style.Triggers>
+            <DataTrigger TargetType="Border"
+                     Binding="{Binding weather[0].main}"
+                     Value="Clouds">
+                <Setter Property="Background">
+                    <Setter.Value>
+                        <LinearGradientBrush EndPoint="0,1">
+                            <GradientStop Color="#757F9A" Offset="0.0"/>
+                            <GradientStop Color="#D7DDE8" Offset="1.0"/>
+                        </LinearGradientBrush>
+                    </Setter.Value>
+                </Setter>
+            </DataTrigger>
+            <DataTrigger TargetType="Border"
+                         Binding="{Binding weather[0].main}"
+                         Value="Rain">
+                <Setter Property="Background">
+                    <Setter.Value>
+                        <LinearGradientBrush EndPoint="0,1">
+                            <GradientStop Color="#203A43" Offset="0.0"/>
+                            <GradientStop Color="#2C5364" Offset="1.0"/>
+                        </LinearGradientBrush>
+                    </Setter.Value>
+                </Setter>
+            </DataTrigger>
+
+            <DataTrigger TargetType="Border"
+                         Binding="{Binding weather[0].main}"
+                         Value="Clear">
+                <Setter Property="Background">
+                    <Setter.Value>
+                        <LinearGradientBrush EndPoint="0,1">
+                            <GradientStop Color="#FFB6C1" Offset="0.0"/> <!--56CCF2-->
+                            <GradientStop Color="#4A90E2" Offset="1.0"/>
+                        </LinearGradientBrush>
+                    </Setter.Value>
+                </Setter>
+            </DataTrigger>
+        </Style.Triggers>
+    </Style>
+</ResourceDictionary>

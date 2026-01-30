@@ -3,165 +3,213 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:viewmodels="clr-namespace:WeatherApp.ViewModels"
              xmlns:model="clr-namespace:WeatherApp.Model"
+             xmlns:views="clr-namespace:WeatherApp.Views"
              x:DataType="viewmodels:MainPageViewModel"
              x:Class="WeatherApp.MainPage"
              Shell.NavBarIsVisible="False">
-
-
     <Grid>
-        <BoxView>
-        <!--Background gradient-->
-            <BoxView.Background>
-                <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
-                    <GradientStop Color="#1e3c72" Offset="0.0"/>
-                    <GradientStop Color="#2a5298" Offset="1.0"/>
-                </LinearGradientBrush>
-            </BoxView.Background>
-        </BoxView>
+        <!--<views:BackgroundEffects BindingContext="{Binding Weather[0]}"
+                                     IsVisible="{Binding Weather.Count}"/>-->
+        <Border Style="{DynamicResource ResponsiveBackground}"
+                StrokeShape="RoundRectangle 20"
+                Margin="20"
+                Padding="20"
+                VerticalOptions="Fill">
+            <ScrollView>
+                <VerticalStackLayout Padding="20" Spacing="20">
 
-        <ScrollView>
-            <VerticalStackLayout Padding="20" Spacing="20">
+                    <!--Search bar-->
+                    <BoxView HeightRequest="40" Color="Transparent"/>
+                    <Border StrokeShape="RoundRectangle 25"
+                            BackgroundColor="#30FFFFFF"
+                            StrokeThickness="0"
+                            Padding="15,5"> 
 
-                <!--Search bar-->
-                <BoxView HeightRequest="40" Color="Transparent"/>
-                <Border StrokeShape="RoundRectangle 25"
-                        BackgroundColor="#30FFFFFF"
-                        StrokeThickness="0"
-                        Padding="15,5">
-                    <Grid ColumnDefinitions="*, Auto">
-                        <Entry x:Name="CityEntry"
-                               Text="{Binding SelectedCity, Mode=TwoWay}" 
-                               Placeholder="Search city.."
-                               PlaceholderColor="LightGray"
-                               TextColor="White"
-                               FontSize="18"
-                               VerticalOptions="Center"
-                               ReturnCommand="{Binding FetchCityWeatherCommand}"
-                               Grid.Column="0"/>
-                        <!--Search button : Later change to ImageSource to use Icon for button-->
-                        <ImageButton Grid.Column="1"
-                                     Source="search_icon.png"
-                                     Command="{Binding FetchCityWeatherCommand}"
-                                     HeightRequest="20"
-                                     WidthRequest="20"
-                                     BackgroundColor="Transparent"
-                                     VerticalOptions="Center"
-                                     Padding="5 5 5 5">
-                        </ImageButton>
-                    </Grid>
-                </Border>
+                        <Grid ColumnDefinitions="*, Auto">
+                            <Entry x:Name="CityEntry"
+                                   Text="{Binding SelectedCity, Mode=TwoWay}" 
+                                   Placeholder="Search city.."
+                                   PlaceholderColor="LightGray"
+                                   TextColor="White"
+                                   FontSize="18"
+                                   VerticalOptions="Center"
+                                   ReturnCommand="{Binding FetchCityWeatherCommand}"
+                                   Grid.Column="0"/>    
+                            <HorizontalStackLayout Grid.Column="1" VerticalOptions="Center">
+                                <!--Clear button-->
+                                <ImageButton Grid.Column="1"
+                                             Source="clear_icon.png"
+                                             Command="{Binding ClearCommand}"
+                                             HeightRequest="20"
+                                             WidthRequest="20"
+                                             BackgroundColor="Transparent"
+                                             VerticalOptions="Center"
+                                             Padding="5 5 5 5">
+                                    <ImageButton.Triggers>
+                                        <DataTrigger TargetType="ImageButton"
+                                                     Binding="{Binding SelectedCity.Length}"
+                                                     Value="0">
+                                            <Setter Property="IsVisible" Value="False"/>
+                                        </DataTrigger>
+                                    </ImageButton.Triggers>
+                                </ImageButton>
+                                <!--Search button-->
+                                <ImageButton Grid.Column="2"
+                                             Source="search_icon.png"
+                                             Command="{Binding FetchCityWeatherCommand}"
+                                             HeightRequest="20"
+                                             WidthRequest="20"
+                                             BackgroundColor="Transparent"
+                                             VerticalOptions="Center"
+                                             Padding="5 5 5 5">
+                                </ImageButton>
+                            </HorizontalStackLayout>
+                        </Grid>
+                    </Border>
 
-                <!--Loading indicator-->
-                <ActivityIndicator IsRunning="{Binding IsBusy}"
+                    <!--Loading indicator-->
+                    <ActivityIndicator IsRunning="{Binding IsBusy}"
                                    IsVisible="{Binding IsBusy}"
                                    Color="White"
                                    HeightRequest="40"/>
 
-                <!--Showing weather card-->
-                <CollectionView ItemsSource="{Binding Weather}"
+                    <!--Showing weather card-->
+                    <CollectionView ItemsSource="{Binding Weather}"
                                 IsVisible="{Binding Weather.Count}">
-                    <CollectionView.ItemTemplate>
-                        <DataTemplate x:DataType="model:WeatherModel">
-                            <VerticalStackLayout Spacing="20">
-                                <Border StrokeShape="RoundRectangle 20"
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate x:DataType="model:WeatherModel">
+                                <VerticalStackLayout Spacing="20">
+                                    <Border StrokeShape="RoundRectangle 20"
                                         BackgroundColor="#40FFFFFF"
                                         StrokeThickness="0"
                                         Padding="20">
-                                    <VerticalStackLayout Spacing="10" HorizontalOptions="Center">
-                                        <Label Text="{Binding name}" 
+                                        <VerticalStackLayout Spacing="10" HorizontalOptions="Center">
+                                            <Label Text="{Binding name}" 
                                            FontSize="32" 
                                            FontAttributes="Bold"
                                            TextColor="White" 
                                            HorizontalOptions="Center"/>
 
-                                        <HorizontalStackLayout HorizontalOptions="Center" VerticalOptions="Center" Spacing="10">
-                                            <Label Text="{Binding main.temp, StringFormat='{0:F1}°C'}" 
+                                            <HorizontalStackLayout HorizontalOptions="Center" VerticalOptions="Center" Spacing="10">
+                                                <Label Text="{Binding main.temp, StringFormat='{0:F1}°C'}" 
                                                    FontSize="50" 
                                                    FontAttributes="Bold" 
                                                    TextColor="White" 
                                                    HorizontalOptions="Center"
                                                    VerticalOptions="Center"/>
-                                            <Image HeightRequest="100"
+                                                <Image HeightRequest="100"
                                                    WidthRequest="100"
                                                    HorizontalOptions="Center">
-                                                <Image.Source>
-                                                    <UriImageSource Uri="{Binding IconUrl}"
+                                                    <Image.Source>
+                                                        <UriImageSource Uri="{Binding IconUrl}"
                                                                     CachingEnabled="False"/>
-                                                </Image.Source>
-                                            </Image>
-                                        </HorizontalStackLayout>
-                                        
-                                        <Label Text="{Binding weather[0].description}" 
+                                                    </Image.Source>
+                                                </Image>
+                                            </HorizontalStackLayout>
+
+                                            <Label Text="{Binding weather[0].description}" 
                                            FontSize="18"
                                            FontAttributes="Italic"
                                            TextColor="LightGray" 
                                            HorizontalOptions="Center"
                                            TextTransform="Uppercase"/>
 
-                                        <!--Sunrise and sunset-->
-                                        <Grid ColumnDefinitions="Auto, Auto, Auto" HorizontalOptions="Center" Margin="0 10 0 0">
-                                            <Label Grid.Column="0"
+                                            <!--Sunrise and sunset-->
+                                            <Grid ColumnDefinitions="Auto, Auto, Auto" HorizontalOptions="Center" Margin="0 10 0 0">
+                                                <Label Grid.Column="0"
                                                Text="{Binding SunriseView}" 
                                                TextColor="White"
                                                FontSize="20"/>
-                                            <Image Source="sun_icon.png"
+                                                <Image Source="sun_icon.png"
                                                    HeightRequest="30"
                                                    Grid.Column="1"/>
-                                            <Label Grid.Column="2"
+                                                <Label Grid.Column="2"
                                                Text="{Binding SunsetView}" 
                                                TextColor="White" 
                                                FontSize="20"/>
-                                        </Grid>
-                                    </VerticalStackLayout>
-                                </Border>
-                                <!--5 day prognosis-->
-                                <FlexLayout BindableLayout.ItemsSource="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:MainPageViewModel}}, Path=Forecast}"
+                                            </Grid>
+                                        </VerticalStackLayout>
+                                    </Border>
+                                    <!--5 day prognosis-->
+                                    <FlexLayout BindableLayout.ItemsSource="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:MainPageViewModel}}, Path=Forecast}"
                                             JustifyContent="SpaceBetween"
                                             AlignItems="Center"
                                             Direction="Row"
                                             Margin="20 0 35 0">
 
-                                    <BindableLayout.ItemTemplate>
-                                        <DataTemplate x:DataType="model:ForecastItem">
-                                            <Border FlexLayout.Basis="19%"
+                                        <BindableLayout.ItemTemplate>
+                                            <DataTemplate x:DataType="model:ForecastItem">
+                                                <Border FlexLayout.Basis="19%"
                                                     StrokeShape="RoundRectangle 12"
                                                     BackgroundColor="#30FFFFFF"
                                                     StrokeThickness="0"
                                                     Padding="5,10">
 
-                                                <VerticalStackLayout Spacing="5" HorizontalOptions="Center">
-                                                    <Label Text="{Binding DayDisplay}" 
+                                                    <VerticalStackLayout Spacing="5" HorizontalOptions="Center">
+                                                        <Label Text="{Binding DayDisplay}" 
                                                            TextColor="White" 
                                                            FontSize="14" 
                                                            FontAttributes="Bold" 
                                                            HorizontalTextAlignment="Center"/>
 
-                                                    <Image Source="{Binding IconUrl}"
+                                                        <Image Source="{Binding IconUrl}"
                                                            HeightRequest="45"
                                                            WidthRequest="45"
                                                            HorizontalOptions="Center"/>
 
-                                                    <Label Text="{Binding main.temp, StringFormat='{0:F0}°'}" 
+                                                        <Label Text="{Binding main.temp, StringFormat='{0:F0}°'}" 
                                                            TextColor="White" 
                                                            FontSize="16" 
                                                            FontAttributes="Bold" 
                                                            HorizontalTextAlignment="Center"/>
-                                                </VerticalStackLayout>
-                                            </Border>
-                                        </DataTemplate>
-                                    </BindableLayout.ItemTemplate>
-                                </FlexLayout>
-                            </VerticalStackLayout>
-                        </DataTemplate>
-                    </CollectionView.ItemTemplate>
-                </CollectionView>
+                                                    </VerticalStackLayout>
+                                                </Border>
+                                            </DataTemplate>
+                                        </BindableLayout.ItemTemplate>
+                                    </FlexLayout>
+                                </VerticalStackLayout>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
                     <!--Error Message-->
                     <Label Text="{Binding ErrorMessage}"
                             TextColor="Salmon"
                             HorizontalOptions="Center"
                             FontAttributes="Italic"/>
-            </VerticalStackLayout>
-        </ScrollView>
+                </VerticalStackLayout>
+            </ScrollView>
+        </Border>
+
+        <!--Dropdown for city suggestions in search field-->
+        <Border ZIndex="99" 
+                VerticalOptions="Start"
+                HorizontalOptions="Fill"
+                Margin="65,176,165,0" 
+                BackgroundColor="White"
+                StrokeShape="RoundRectangle 15"
+                IsVisible="{Binding CitySuggestions.Count}"
+                MaximumHeightRequest="250"
+                StrokeThickness="1"
+                Stroke="LightGray">
+
+            <CollectionView ItemsSource="{Binding CitySuggestions}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="model:CityInfo">
+                        <Grid Padding="15">
+                            <Label Text="{Binding name}" 
+                                   TextColor="Black"
+                                   FontSize="16"/>
+                            <Grid.GestureRecognizers>
+                                <TapGestureRecognizer 
+                                    Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:MainPageViewModel}}, Path=FetchCityWeatherCommand}"
+                                    CommandParameter="{Binding name}"/>
+                            </Grid.GestureRecognizers>
+                        </Grid>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </Border>
+
     </Grid>
 </ContentPage>
 

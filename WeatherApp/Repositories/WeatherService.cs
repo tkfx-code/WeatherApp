@@ -70,5 +70,19 @@ namespace WeatherApp.Repositories
                 return null;
             }
         }
+
+        public async Task<List<CityInfo>> GetCitySuggestionsAsync(string query)
+        {
+            var url = $"https://api.openweathermap.org/geo/1.0/direct?q={query}&limit=5&appid={AppConfig.WeatherApiKey}";
+
+            try
+            {
+                var response = await _httpClient.GetFromJsonAsync<List<CityInfo>>(url);
+                return response ?? new List<CityInfo>();
+            } catch
+            {
+                return new List<CityInfo>();
+            }
+        }
     }
 }

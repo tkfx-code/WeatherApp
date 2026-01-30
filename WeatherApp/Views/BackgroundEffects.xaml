@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:p="clr-namespace:Particle.Maui;assembly=Particle.Maui"
+             x:Class="WeatherApp.Views.BackgroundEffects">
+    <Grid>
+        <Ellipse x:Name="SunGlow" HeightRequest="400" WidthRequest="400" Opacity="0">
+            <Ellipse.Fill>
+                <RadialGradientBrush Radius="0.5">
+                    <GradientStop Color="#44FFF700" Offset="0.1" />
+                    <GradientStop Color="Transparent" Offset="1.0" />
+                </RadialGradientBrush>
+            </Ellipse.Fill>
+            <Ellipse.Triggers>
+                <DataTrigger TargetType="Ellipse" Binding="{Binding weather[0].main}" Value="Clear">
+                    <Setter Property="Opacity" Value="1" />
+                </DataTrigger>
+            </Ellipse.Triggers>
+        </Ellipse>
+
+        <p:ParticleView x:Name="RainEffect" IsActive="False" VerticalOptions="Fill" HorizontalOptions="Fill">
+            <p:ParticleView.Triggers>
+                <DataTrigger TargetType="p:ParticleView" Binding="{Binding weather[0].main}" Value="Rain">
+                    <Setter Property="IsActive" Value="True"/>
+                </DataTrigger>
+            </p:ParticleView.Triggers>
+        </p:ParticleView>
+
+        <BoxView x:Name="LightningOverlay" BackgroundColor="White" Opacity="0" IsVisible="False">
+            <BoxView.Triggers>
+                <DataTrigger TargetType="BoxView" Binding="{Binding weather[0].main}" Value="Thunderstorm">
+                    <Setter Property="IsVisible" Value="True" />
+                </DataTrigger>
+            </BoxView.Triggers>
+        </BoxView>
+
+    </Grid>
+</ContentView>
