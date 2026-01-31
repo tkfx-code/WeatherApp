@@ -32,6 +32,8 @@ namespace WeatherApp.ViewModels
         private Brush _backgroundBrush = WeatherHelper.GetBackgroundGradient("Clear");
         [ObservableProperty]
         private ObservableCollection<CityInfo> _citySuggestions = new();
+        [ObservableProperty]
+        private string _weatherAnimation = string.Empty;
 
 
         public MainPageViewModel(IWeatherService weatherService)
@@ -52,6 +54,7 @@ namespace WeatherApp.ViewModels
             Weather.Clear();
             Forecast.Clear();
             CitySuggestions.Clear();
+            WeatherAnimation = string.Empty;
 
             IsBusy = false;
             SelectedWeather = null;
@@ -106,8 +109,9 @@ namespace WeatherApp.ViewModels
                     {
                         await Shell.Current.DisplayAlert("Error", WeatherHelper.GeneralError, "OK");
                     }
+                    WeatherAnimation = WeatherHelper.GetWeatherAnimation(weatherCondition);
 
-                        Weather.Add(result);
+                    Weather.Add(result);
                     IsDetailsVisible = false;
                 }
                 var forecastResult = await _weatherService.GetForecastAsync(cityToSearch);

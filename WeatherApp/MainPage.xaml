@@ -8,15 +8,27 @@
              x:Class="WeatherApp.MainPage"
              Shell.NavBarIsVisible="False"
              Background="{Binding BackgroundBrush}">
-    <Grid>
-        <!--<views:BackgroundEffects BindingContext="{Binding Weather[0]}"
-                                     IsVisible="{Binding Weather.Count}"/>-->
+    <Grid HorizontalOptions="Fill" VerticalOptions="Fill" ColumnDefinitions="*" RowDefinitions="*">
+        <!--Background animation-->
+        <AbsoluteLayout HorizontalOptions="Fill" VerticalOptions="Fill" InputTransparent="True">
+            <Image x:Name="BackgroundImage" Source="{Binding WeatherAnimation}"
+               IsAnimationPlaying="True"
+               Aspect="AspectFill"
+               Opacity="0.6"
+               InputTransparent="True"
+               AbsoluteLayout.LayoutBounds="0.5,0.5,1,1" 
+               AbsoluteLayout.LayoutFlags="All" 
+               HorizontalOptions="Center"
+               VerticalOptions="Center"/>
+        </AbsoluteLayout>
         <Border BackgroundColor="Transparent"
                 StrokeThickness="0"
                 StrokeShape="RoundRectangle 20"
+                HorizontalOptions="Fill"
+                VerticalOptions="Fill"
                 Margin="20"
-                Padding="20"
-                VerticalOptions="Fill">
+                Padding="20">
+            
             <ScrollView>
                 <VerticalStackLayout Padding="20" Spacing="20">
 
