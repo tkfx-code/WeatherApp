@@ -102,6 +102,7 @@ namespace WeatherApp.Helpers
             return gradient;
         }
 
+        //Test that does not work with MAUI since they dont play animated png or webp
         public static string GetWeatherAnimation(string weatherCondition)
         {
             return weatherCondition?.ToLower() switch

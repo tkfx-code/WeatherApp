@@ -89,12 +89,6 @@ namespace WeatherApp.ViewModels
                     result.DayDisplay = WeatherHelper.GetDayName(null, true);
                     result.IconUrl = WeatherHelper.GetIconUrl(result.weather);
 
-                    //Force show icon
-                    MainThread.BeginInvokeOnMainThread(() =>
-                    {
-                        result.IconUrl = WeatherHelper.GetIconUrl(result.weather);
-                    });
-
                     //Show converted Sunrise and Sunset time 
                     result.SunriseView = WeatherHelper.ConvertUnixToTime(result.sys.sunrise, result.timezone);
                     result.SunsetView = WeatherHelper.ConvertUnixToTime(result.sys.sunset, result.timezone);
@@ -107,7 +101,7 @@ namespace WeatherApp.ViewModels
                     }
                     else
                     {
-                        await Shell.Current.DisplayAlert("Error", WeatherHelper.GeneralError, "OK");
+                        await Shell.Current.DisplayAlertAsync("Error", WeatherHelper.GeneralError, "OK");
                     }
                     WeatherAnimation = WeatherHelper.GetWeatherAnimation(weatherCondition);
 
